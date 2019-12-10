@@ -1,4 +1,4 @@
 const index = (req, res) => {
-  res.send('Hello Controller')
+  res.render('home/index')
 }
 module.exports = { index }
