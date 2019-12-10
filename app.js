@@ -4,7 +4,12 @@ const hbs = require('express-hbs')
 const path = require('path')
 const logger = require('morgan')
 const app = express()
-
+const mongoose = require('./config/mongoose')
+// connect to the database
+mongoose.connect().catch(error => {
+  console.error(error)
+  process.exit(1)
+})
 // view engine setup
 app.engine('hbs', hbs.express4({
   defaultLayout: path.join(__dirname, 'views', 'layouts', 'default')
