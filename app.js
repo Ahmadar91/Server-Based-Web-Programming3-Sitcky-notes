@@ -3,6 +3,7 @@ const express = require('express')
 const hbs = require('express-hbs')
 const path = require('path')
 const logger = require('morgan')
+const session = require('express-session')
 const app = express()
 const mongoose = require('./config/mongoose')
 // connect to the database
@@ -21,8 +22,30 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(logger('dev'))
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
+// setup and use session middleware (https://github.com/expressjs/session)
+const sessionOptions = {
+  name: 'name of keyboard cat', // Don't use default session cookie name.
+  secret: 'keyboard cat', // Change it!!! The secret is used to hash the session with HMAC.
+  resave: false, // Resave even if a request is not changing the session.
+  saveUninitialized: false, // Don't save a created but not modified session.
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}
+app.use(session(sessionOptions))
+// middleware to be executed before the routes
+app.use((req, res, next) => {
+  // flash messages - survives only a round trip
+  if (req.session.flash) {
+    res.locals.flash = req.session.flash
+    delete req.session.flash
+  }
+
+  next()
+})
 // routes
 app.use('/', require('./routes/homeRouter'))
+app.use('/snippet', require('./routes/snippetRouter'))
 // catch 404
 app.use((req, res, next) => {
   res.status(404)
