@@ -1,7 +1,6 @@
 <h1>
     <span class="far fa-list-alt"></span> Code snippets
 </h1>
-
 <table class="table table-striped">
     <thead>
         <tr>
@@ -14,15 +13,13 @@
         {{#each viewData.codeSnippets}}
         <tr>
             <td class="w-100">
-<pre>
+                <pre>
 <code>
  {{this.description}}
 </code>
 </pre>
-               
 
-
-                </td>
+            </td>
             <td>
                 <a href="/snippet/edit/{{this.id}}"><span class="far fa-edit"></span></a>
                 <a href="/snippet/delete/{{this.id}}"><span class="far fa-trash-alt"></span></a>
