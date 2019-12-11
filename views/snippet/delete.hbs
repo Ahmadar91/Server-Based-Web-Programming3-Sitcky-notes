@@ -5,7 +5,8 @@
 <form method="post" action="/snippet/delete">
   <input type="hidden" name="id" value="{{viewData.id}}" />
   <div class="form-group">
-    <input type="text" class="form-control" name="description" placeholder="Update code snippt description here" value="{{viewData.description}}" readonly="readonly" />
+     <textarea class="form-control" name="description" rows="10" cols="50"  readonly="readonly">
+{{viewData.description}}</textarea>
   </div>
   <button type="submit" class="btn btn-lg btn-primary" autofocus="autofocus">Delete</button>
 </form>

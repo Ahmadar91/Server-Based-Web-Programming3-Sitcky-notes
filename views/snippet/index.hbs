@@ -13,7 +13,16 @@
         {{#if viewData.codeSnippets.length }}
         {{#each viewData.codeSnippets}}
         <tr>
-            <td class="w-100">{{this.description}}</td>
+            <td class="w-100">
+<pre>
+<code>
+ {{this.description}}
+</code>
+</pre>
+               
+
+
+                </td>
             <td>
                 <a href="/snippet/edit/{{this.id}}"><span class="far fa-edit"></span></a>
                 <a href="/snippet/delete/{{this.id}}"><span class="far fa-trash-alt"></span></a>

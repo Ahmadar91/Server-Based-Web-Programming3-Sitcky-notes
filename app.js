@@ -5,6 +5,7 @@ const path = require('path')
 const logger = require('morgan')
 const session = require('express-session')
 const app = express()
+const User = require('./models/user')
 const mongoose = require('./config/mongoose')
 // connect to the database
 mongoose.connect().catch(error => {
@@ -43,9 +44,28 @@ app.use((req, res, next) => {
 
   next()
 })
+
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    return next()
+  }
+  User.findById(req.session.user._id)
+    .then(user => {
+      req.user = user
+      next()
+    })
+    .catch(err => console.log(err))
+})
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn
+  next()
+})
+
 // routes
+app.use(require('./routes/authRouter'))
 app.use('/', require('./routes/homeRouter'))
 app.use('/snippet', require('./routes/snippetRouter'))
+
 // catch 404
 app.use((req, res, next) => {
   res.status(404)

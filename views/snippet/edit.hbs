@@ -6,7 +6,8 @@
 <form method="post" action="/snippet/edit">
   <input type="hidden" name="id" value="{{viewData.id}}" />
   <div class="form-group">
-    <input type="text" class="form-control" name="description" placeholder="Update code snippet description here" value="{{viewData.description}}" required="required" autofocus="autofocus" />
+     <textarea class="form-control" name="description" rows="10" cols="50" placeholder="Update code snippet description here" required="required" autofocus="autofocus">
+{{viewData.description}}</textarea>
   </div>
   <button type="submit" class="btn btn-lg btn-primary">Update</button>
 </form>

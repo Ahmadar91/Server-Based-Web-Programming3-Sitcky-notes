@@ -16,6 +16,18 @@
         <li class="nav-item">
           <a class="nav-link" href="/snippet/create">Create</a>
         </li>
+         {{#if isAuthenticated }}
+              <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+              {{else}}
+              <li class="nav-item">
+                <a class="nav-link" href="/signup">Register</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
+            {{/if}}
       </ul>
     </div>
   </nav>
