@@ -11,7 +11,7 @@ const snippetController = {}
 snippetController.index = async (req, res, next) => {
   try {
     const viewData = {
-      codeSnippets: (await CodeSnippet.find({}))
+      codeSnippets: (await CodeSnippet.find({ name: req.session.user.name }))
         .map(codeSnippet => ({
           id: codeSnippet._id,
           description: codeSnippet.description
@@ -39,7 +39,8 @@ snippetController.create = async (req, res, next) => {
 snippetController.createPost = async (req, res, next) => {
   try {
     const codeSnippet = new CodeSnippet({
-      description: req.body.description
+      description: req.body.description,
+      name: req.session.user.name
     })
 
     await codeSnippet.save()
