@@ -7,6 +7,11 @@ const session = require('express-session')
 const app = express()
 const User = require('./models/user')
 const mongoose = require('./config/mongoose')
+const MongoDBStore = require('connect-mongodb-session')(session)
+const store = new MongoDBStore({
+  uri: 'mongodb+srv://dbuser:nqrMG2AjFViHjNQS@uniprojects-jbhjp.mongodb.net/snippets?retryWrites=true&w=majority',
+  collection: 'sessions'
+})
 // connect to the database
 mongoose.connect().catch(error => {
   console.error(error)
@@ -29,6 +34,7 @@ const sessionOptions = {
   secret: 'keyboard cat', // Change it!!! The secret is used to hash the session with HMAC.
   resave: false, // Resave even if a request is not changing the session.
   saveUninitialized: false, // Don't save a created but not modified session.
+  store: store,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 // 1 day
   }
