@@ -1,22 +1,23 @@
 const bcrypt = require('bcryptjs')
 
 const User = require('../models/user')
+const authController = {}
 
-exports.getLogin = (req, res, next) => {
+authController.getLogin = (req, res, next) => {
   res.render('auth/login', {
     path: '/login',
     pageTitle: 'Login'
   })
 }
 
-exports.getSignup = (req, res, next) => {
+authController.getSignup = (req, res, next) => {
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup'
   })
 }
 
-exports.postLogin = (req, res, next) => {
+authController.postLogin = (req, res, next) => {
   const name = req.body.name
   const password = req.body.password
   User.findOne({ name: name })
@@ -49,7 +50,7 @@ exports.postLogin = (req, res, next) => {
     .catch(err => console.log(err))
 }
 
-exports.postSignup = (req, res, next) => {
+authController.postSignup = (req, res, next) => {
   const name = req.body.name
   const password = req.body.password
   User.findOne({ name: name })
@@ -77,7 +78,7 @@ exports.postSignup = (req, res, next) => {
     })
 }
 
-exports.logout = (req, res, next) => {
+authController.logout = (req, res, next) => {
   req.session.destroy(err => {
     if (err) {
       console.log(err)
@@ -85,3 +86,4 @@ exports.logout = (req, res, next) => {
     res.redirect('/')
   })
 }
+module.exports = authController

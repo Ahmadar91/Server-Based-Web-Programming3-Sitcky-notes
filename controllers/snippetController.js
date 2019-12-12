@@ -10,14 +10,18 @@ const snippetController = {}
  */
 snippetController.index = async (req, res, next) => {
   try {
-    const viewData = {
-      codeSnippets: (await CodeSnippet.find({ name: req.session.user.name }))
-        .map(codeSnippet => ({
-          id: codeSnippet._id,
-          description: codeSnippet.description
-        }))
+    if (req.session.user) {
+      const viewData = {
+        codeSnippets: (await CodeSnippet.find({ name: req.session.user.name }))
+          .map(codeSnippet => ({
+            id: codeSnippet._id,
+            description: codeSnippet.description
+          }))
+      }
+      res.render('snippet/index', { viewData })
+    } else {
+      res.send(403, 'access Forbidden')
     }
-    res.render('snippet/index', { viewData })
   } catch (error) {
     next(error)
   }
@@ -27,10 +31,14 @@ snippetController.index = async (req, res, next) => {
  * create GET
  */
 snippetController.create = async (req, res, next) => {
-  const viewData = {
-    description: ''
+  if (req.session.user) {
+    const viewData = {
+      description: ''
+    }
+    res.render('snippet/create', { viewData })
+  } else {
+    res.send(403, 'access Forbidden')
   }
-  res.render('snippet/create', { viewData })
 }
 
 /**
@@ -58,12 +66,21 @@ snippetController.createPost = async (req, res, next) => {
  */
 snippetController.edit = async (req, res, next) => {
   try {
-    const codeSnippet = await CodeSnippet.findOne({ _id: req.params.id })
-    const viewData = {
-      id: codeSnippet._id,
-      description: codeSnippet.description
+    if (req.session.user) {
+      const codeSnippet = await CodeSnippet.findOne({ _id: req.params.id })
+      if (codeSnippet.name === req.session.user.name) {
+        const viewData = {
+          id: codeSnippet._id,
+          description: codeSnippet.description
+        }
+        res.render('snippet/edit', { viewData })
+      } else {
+        req.session.flash = { type: 'danger', text: 'Invalid User' }
+        res.redirect('/')
+      }
+    } else {
+      res.send(403, 'access Forbidden')
     }
-    res.render('snippet/edit', { viewData })
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
     res.redirect('.')
@@ -75,19 +92,25 @@ snippetController.edit = async (req, res, next) => {
  */
 snippetController.editPost = async (req, res, next) => {
   try {
-    const result = await CodeSnippet.updateOne({ _id: req.body.id }, {
-      description: req.body.description
-    })
+    const codeSnippet = await CodeSnippet.findOne({ _id: req.body.id })
+    if (codeSnippet.name === req.session.user.name) {
+      const result = await CodeSnippet.updateOne({ _id: codeSnippet.id }, {
+        description: req.body.description
+      })
 
-    if (result.nModified === 1) {
-      req.session.flash = { type: 'success', text: 'code-snippet was updated successfully.' }
-    } else {
-      req.session.flash = {
-        type: 'danger',
-        text: 'The code-snippet you attempted to update was removed by another user after you got the original values.'
+      if (result.nModified === 1) {
+        req.session.flash = { type: 'success', text: 'code-snippet was updated successfully.' }
+      } else {
+        req.session.flash = {
+          type: 'danger',
+          text: 'The code-snippet you attempted to update was removed by another user after you got the original values.'
+        }
       }
+      res.redirect('.')
+    } else {
+      req.session.flash = { type: 'danger', text: 'Invalid User' }
+      res.redirect(`./edit/${req.body.id}`)
     }
-    res.redirect('.')
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
     res.redirect(`./edit/${req.body.id}`)
@@ -99,12 +122,21 @@ snippetController.editPost = async (req, res, next) => {
  */
 snippetController.delete = async (req, res, next) => {
   try {
-    const codeSnippet = await CodeSnippet.findOne({ _id: req.params.id })
-    const viewData = {
-      id: codeSnippet._id,
-      description: codeSnippet.description
+    if (req.session.user) {
+      const codeSnippet = await CodeSnippet.findOne({ _id: req.params.id })
+      if (codeSnippet.name === req.session.user.name) {
+        const viewData = {
+          id: codeSnippet._id,
+          description: codeSnippet.description
+        }
+        res.render('snippet/delete', { viewData })
+      } else {
+        req.session.flash = { type: 'danger', text: 'Invalid User' }
+        res.redirect('/')
+      }
+    } else {
+      res.send(403, 'access Forbidden')
     }
-    res.render('snippet/delete', { viewData })
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
     res.redirect('.')
@@ -116,10 +148,15 @@ snippetController.delete = async (req, res, next) => {
  */
 snippetController.deletePost = async (req, res, next) => {
   try {
-    await CodeSnippet.deleteOne({ _id: req.body.id })
-
-    req.session.flash = { type: 'success', text: 'code-snippet was removed successfully.' }
-    res.redirect('.')
+    const codeSnippet = await CodeSnippet.findOne({ _id: req.body.id })
+    if (codeSnippet.name === req.session.user.name) {
+      await CodeSnippet.deleteOne({ _id: codeSnippet.id })
+      req.session.flash = { type: 'success', text: 'code-snippet was removed successfully.' }
+      res.redirect('.')
+    } else {
+      req.session.flash = { type: 'danger', text: 'Invalid USer' }
+      res.redirect(`./delete/${req.body.id}`)
+    }
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
     req.redirect(`./delete/${req.body.id}`)
