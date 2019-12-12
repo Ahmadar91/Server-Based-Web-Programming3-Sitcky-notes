@@ -5,7 +5,6 @@ const path = require('path')
 const logger = require('morgan')
 const session = require('express-session')
 const app = express()
-const User = require('./models/user')
 const mongoose = require('./config/mongoose')
 const MongoDBStore = require('connect-mongodb-session')(session)
 const store = new MongoDBStore({
