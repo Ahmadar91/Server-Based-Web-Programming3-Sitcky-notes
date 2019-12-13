@@ -1,4 +1,4 @@
-    <main>
+    {{!-- <main>
         <form class="login-form" action="/signup" method="POST">
             <div class="form-control">
                 <label for="name">name</label>
@@ -8,6 +8,22 @@
                 <label for="password">Password</label>
                 <input type="password" name="password" id="password" required>
             </div>
-            <button class="btn" type="submit">Signup</button>
+            <button class="btn" type="submit">Sign up</button>
         </form>
     </main>
+
+ --}}
+
+    
+
+<form  action="/signup" method="POST">
+  <div class="form-group">
+    <label for="name">User name: </label>
+    <input type="text"  name="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+  </div>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Sign up</button>
+</form>
