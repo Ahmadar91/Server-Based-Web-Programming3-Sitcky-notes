@@ -3,7 +3,7 @@
   <span class="far fa-plus-square"></span> Create
 </h1>
 
-<form method="post" action="/snippet/create">
+<form method="post" action="/snippet/create" onsubmit="return disable(this)">
 <div class="form-group">
     <input type="text" class="form-control" name="title" placeholder="Enter a Code snippet Title here" required="required" autofocus="autofocus" />
   </div>
@@ -11,5 +11,11 @@
       <textarea class="form-control" name="description" rows="4" cols="50" placeholder="Enter a new snippet here" required="required" autofocus="autofocus">
 </textarea>
   </div>
-  <button type="submit" class="btn btn-lg btn-primary">Save</button>
+  <button name="submit1" type="submit" class="btn btn-lg btn-primary" >Save</button>
 </form>
+
+<script>
+function disable(e){
+  e.submit1.disabled = true
+}
+</script>
