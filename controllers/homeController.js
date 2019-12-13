@@ -7,7 +7,7 @@ homeController.index = async (req, res, next) => {
       codeSnippets: (await CodeSnippet.find({}))
         .map(codeSnippet => ({
           id: codeSnippet._id,
-          title:codeSnippet.title,
+          title: codeSnippet.title,
           name: codeSnippet.name,
           description: codeSnippet.description
         }))
