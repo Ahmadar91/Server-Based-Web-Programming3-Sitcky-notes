@@ -4,6 +4,9 @@
 
 <form method="post" action="/snippet/delete">
   <input type="hidden" name="id" value="{{viewData.id}}" />
+    <div class="form-group">
+    <input type="text" class="form-control" name="title" value="{{viewData.title}}" placeholder="delete the code snippet title" required="required" autofocus="autofocus" readonly="readonly" />
+  </div>
   <div class="form-group">
      <textarea class="form-control" name="description" rows="10" cols="50"  readonly="readonly">
 {{viewData.description}}</textarea>

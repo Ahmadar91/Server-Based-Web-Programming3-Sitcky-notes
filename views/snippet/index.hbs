@@ -3,7 +3,7 @@
 </h1>
 <table class="table table-striped">
     <thead>
-        <tr>
+        <tr> <th>Title</th>
             <th>Description</th>
             <th>Action</th>
         </tr>
@@ -12,6 +12,8 @@
         {{#if viewData.codeSnippets.length }}
         {{#each viewData.codeSnippets}}
         <tr>
+                        <td class="text-center text-primary"><span>{{this.title}}</span></td>
+
             <td class="w-100">
                 <pre>
 <code>

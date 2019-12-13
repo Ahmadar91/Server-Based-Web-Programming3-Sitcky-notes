@@ -15,6 +15,7 @@ snippetController.index = async (req, res, next) => {
         codeSnippets: (await CodeSnippet.find({ name: req.session.user.name }))
           .map(codeSnippet => ({
             id: codeSnippet._id,
+            title:codeSnippet.title,
             description: codeSnippet.description
           }))
       }
@@ -33,6 +34,7 @@ snippetController.index = async (req, res, next) => {
 snippetController.create = async (req, res, next) => {
   if (req.session.user) {
     const viewData = {
+      title:'',
       description: ''
     }
     res.render('snippet/create', { viewData })
@@ -47,6 +49,7 @@ snippetController.create = async (req, res, next) => {
 snippetController.createPost = async (req, res, next) => {
   try {
     const codeSnippet = new CodeSnippet({
+      title:req.body.title,
       description: req.body.description,
       name: req.session.user.name
     })
@@ -71,6 +74,7 @@ snippetController.edit = async (req, res, next) => {
       if (codeSnippet.name === req.session.user.name) {
         const viewData = {
           id: codeSnippet._id,
+          title: codeSnippet.title,
           description: codeSnippet.description
         }
         res.render('snippet/edit', { viewData })
@@ -95,6 +99,7 @@ snippetController.editPost = async (req, res, next) => {
     const codeSnippet = await CodeSnippet.findOne({ _id: req.body.id })
     if (codeSnippet.name === req.session.user.name) {
       const result = await CodeSnippet.updateOne({ _id: codeSnippet.id }, {
+        title: req.body.title,
         description: req.body.description
       })
 
@@ -127,6 +132,7 @@ snippetController.delete = async (req, res, next) => {
       if (codeSnippet.name === req.session.user.name) {
         const viewData = {
           id: codeSnippet._id,
+          title: codeSnippet.title,
           description: codeSnippet.description
         }
         res.render('snippet/delete', { viewData })

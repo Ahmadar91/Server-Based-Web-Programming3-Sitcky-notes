@@ -6,6 +6,12 @@ const Schema = mongoose.Schema
 
 // Create a schema.
 const codeSnippetSchema = new mongoose.Schema({
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1
+  },
   description: {
     type: String,
     required: true,
