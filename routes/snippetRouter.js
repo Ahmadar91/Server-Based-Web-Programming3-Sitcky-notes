@@ -8,11 +8,6 @@ const controller = require('../controllers/snippetController')
 
 // GET /
 router.get('/', controller.index)
-
-// // GET, POST /create
-// router.route('/create')
-//   .get(controller.create)
-//   .post(controller.createPost)
 router.get('/create', controller.create)
 router.post('/create', [check('title', 'Title is required').notEmpty(), check('description', 'snippet is required').notEmpty()], controller.createPost)
 // GET, POST /edit

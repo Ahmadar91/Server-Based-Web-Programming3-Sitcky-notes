@@ -84,8 +84,6 @@ snippetController.edit = async (req, res, next) => {
         }
         res.render('snippet/edit', { viewData })
       } else {
-        // req.session.flash = { type: 'danger', text: 'Invalid User' }
-        // res.redirect('/')
         res.status(403).render('error/403')
       }
     } else {
