@@ -2,7 +2,6 @@
 'use strict'
 
 const CodeSnippet = require('../models/CodeSnippet')
-
 const snippetController = {}
 
 /**
@@ -21,7 +20,7 @@ snippetController.index = async (req, res, next) => {
       }
       res.render('snippet/index', { viewData })
     } else {
-      res.send(403, 'access Forbidden')
+      res.status(403).render('error/403')
     }
   } catch (error) {
     next(error)
@@ -39,7 +38,7 @@ snippetController.create = async (req, res, next) => {
     }
     res.render('snippet/create', { viewData })
   } else {
-    res.send(403, 'access Forbidden')
+    res.status(403).render('error/403')
   }
 }
 
@@ -83,7 +82,7 @@ snippetController.edit = async (req, res, next) => {
         res.redirect('/')
       }
     } else {
-      res.send(403, 'access Forbidden')
+      res.status(403).render('error/403')
     }
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
@@ -141,7 +140,7 @@ snippetController.delete = async (req, res, next) => {
         res.redirect('/')
       }
     } else {
-      res.send(403, 'access Forbidden')
+      res.status(403).render('error/403')
     }
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
