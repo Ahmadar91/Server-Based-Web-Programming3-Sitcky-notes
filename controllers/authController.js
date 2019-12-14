@@ -1,20 +1,14 @@
 const bcrypt = require('bcryptjs')
-
+const { validationResult } = require('express-validator/check')
 const User = require('../models/user')
 const authController = {}
 
 authController.getLogin = (req, res, next) => {
-  res.render('auth/login', {
-    path: '/login',
-    pageTitle: 'Login'
-  })
+  res.render('auth/login')
 }
 
 authController.getSignup = (req, res, next) => {
-  res.render('auth/signup', {
-    path: '/signup',
-    pageTitle: 'Signup'
-  })
+  res.render('auth/signup')
 }
 
 authController.postLogin = (req, res, next) => {
@@ -23,7 +17,7 @@ authController.postLogin = (req, res, next) => {
   User.findOne({ name: name })
     .then(user => {
       if (!user) {
-        req.session.flash = { type: 'danger', text: 'Invalid name.' }
+        req.session.flash = { type: 'danger', text: 'Invalid Username.' }
         return res.redirect('/login')
       }
       bcrypt
@@ -39,7 +33,7 @@ authController.postLogin = (req, res, next) => {
               res.redirect('/')
             })
           }
-          req.session.flash = { type: 'danger', text: 'password.' }
+          req.session.flash = { type: 'danger', text: 'Invalid password.' }
           res.redirect('/login')
         })
         .catch(err => {
@@ -53,6 +47,11 @@ authController.postLogin = (req, res, next) => {
 authController.postSignup = (req, res, next) => {
   const name = req.body.name
   const password = req.body.password
+  const validationError = validationResult(req)
+  if (!validationError.isEmpty()) {
+    req.session.flash = { type: 'danger', text: validationError.array()[0].msg }
+    return res.redirect('/signup')
+  }
   User.findOne({ name: name })
     .then(userDoc => {
       if (userDoc) {
