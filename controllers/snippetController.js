@@ -84,8 +84,9 @@ snippetController.edit = async (req, res, next) => {
         }
         res.render('snippet/edit', { viewData })
       } else {
-        req.session.flash = { type: 'danger', text: 'Invalid User' }
-        res.redirect('/')
+        // req.session.flash = { type: 'danger', text: 'Invalid User' }
+        // res.redirect('/')
+        res.status(403).render('error/403')
       }
     } else {
       res.status(403).render('error/403')
@@ -102,7 +103,7 @@ snippetController.edit = async (req, res, next) => {
 snippetController.editPost = async (req, res, next) => {
   try {
     const codeSnippet = await CodeSnippet.findOne({ _id: req.body.id })
-    if (codeSnippet.name === req.session.user.name) {
+    if (req.session.user || codeSnippet.name === req.session.user.name) {
       const validationError = validationResult(req)
       if (!validationError.isEmpty()) {
         req.session.flash = { type: 'danger', text: validationError.array()[0].msg }
@@ -123,8 +124,7 @@ snippetController.editPost = async (req, res, next) => {
       }
       res.redirect('.')
     } else {
-      req.session.flash = { type: 'danger', text: 'Invalid User' }
-      res.redirect(`./edit/${req.body.id}`)
+      res.status(403).render('error/403')
     }
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
@@ -147,8 +147,7 @@ snippetController.delete = async (req, res, next) => {
         }
         res.render('snippet/delete', { viewData })
       } else {
-        req.session.flash = { type: 'danger', text: 'Invalid User' }
-        res.redirect('/')
+        res.status(403).render('error/403')
       }
     } else {
       res.status(403).render('error/403')
@@ -165,13 +164,12 @@ snippetController.delete = async (req, res, next) => {
 snippetController.deletePost = async (req, res, next) => {
   try {
     const codeSnippet = await CodeSnippet.findOne({ _id: req.body.id })
-    if (codeSnippet.name === req.session.user.name) {
+    if (req.session.user || codeSnippet.name === req.session.user.name) {
       await CodeSnippet.deleteOne({ _id: codeSnippet.id })
       req.session.flash = { type: 'success', text: 'code-snippet was removed successfully.' }
       res.redirect('.')
     } else {
-      req.session.flash = { type: 'danger', text: 'Invalid USer' }
-      res.redirect(`./delete/${req.body.id}`)
+      res.status(403).render('error/403')
     }
   } catch (error) {
     req.session.flash = { type: 'danger', text: error.message }
