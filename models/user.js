@@ -6,6 +6,7 @@ const userSchema = new Schema({
   name: {
     type: String,
     required: true,
+    unique: true,
     minlength: 3
   },
   password: {
@@ -14,5 +15,7 @@ const userSchema = new Schema({
     minlength: 5
   }
 })
-
+userSchema.path('password').validate(function (password) {
+  return password.length >= 5
+}, 'the Password must be of minimum of 5 ')
 module.exports = mongoose.model('User', userSchema)
