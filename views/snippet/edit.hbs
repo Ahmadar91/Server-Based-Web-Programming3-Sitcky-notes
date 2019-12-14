@@ -12,5 +12,7 @@
      <textarea class="form-control" name="description" rows="10" cols="50" placeholder="Update code snippet description here" required="required" autofocus="autofocus">
 {{viewData.description}}</textarea>
   </div>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
   <button type="submit" class="btn btn-lg btn-primary">Update</button>
 </form>

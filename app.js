@@ -7,10 +7,13 @@ const session = require('express-session')
 const app = express()
 const mongoose = require('./config/mongoose')
 const MongoDBStore = require('connect-mongodb-session')(session)
+const csrf = require('csurf')
+
 const store = new MongoDBStore({
   uri: 'mongodb+srv://dbuser:nqrMG2AjFViHjNQS@uniprojects-jbhjp.mongodb.net/snippets?retryWrites=true&w=majority',
   collection: 'sessions'
 })
+const csrfProtection = csrf()
 // connect to the database
 mongoose.connect().catch(error => {
   console.error(error)
@@ -39,6 +42,7 @@ const sessionOptions = {
   }
 }
 app.use(session(sessionOptions))
+app.use(csrfProtection)
 // middleware to be executed before the routes
 app.use((req, res, next) => {
   // flash messages - survives only a round trip
@@ -52,6 +56,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn
+  res.locals.csrfToken = req.csrfToken()
   next()
 })
 

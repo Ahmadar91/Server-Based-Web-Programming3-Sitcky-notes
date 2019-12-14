@@ -11,6 +11,8 @@
       <textarea class="form-control" name="description" rows="4" cols="50" placeholder="Enter a new snippet here" required="required" autofocus="autofocus">
 </textarea>
   </div>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
   <button name="submit1" type="submit" class="btn btn-lg btn-primary" >Save</button>
 </form>
 

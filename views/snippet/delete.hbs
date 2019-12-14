@@ -11,5 +11,7 @@
      <textarea class="form-control" name="description" rows="10" cols="50"  readonly="readonly">
 {{viewData.description}}</textarea>
   </div>
+      <input type="hidden" name="_csrf" value="{{csrfToken}}">
+
   <button type="submit" class="btn btn-lg btn-primary" autofocus="autofocus">Delete</button>
 </form>

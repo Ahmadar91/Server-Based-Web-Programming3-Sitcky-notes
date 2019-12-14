@@ -13,5 +13,6 @@
     <label for="confirmPassword">confirm Password</label>
     <input type="password" name="confirmPassword" class="form-control" id="exampleInputPassword1"required minlength="5">
   </div>
+    <input type="hidden" name="_csrf" value="{{csrfToken}}">
   <button type="submit" class="btn btn-primary">Sign up</button>
 </form>

@@ -3,6 +3,7 @@
 
 const CodeSnippet = require('../models/CodeSnippet')
 const snippetController = {}
+const { validationResult } = require('express-validator/check')
 
 /**
  * index GET
@@ -47,6 +48,11 @@ snippetController.create = async (req, res, next) => {
  */
 snippetController.createPost = async (req, res, next) => {
   try {
+    const validationError = validationResult(req)
+    if (!validationError.isEmpty()) {
+      req.session.flash = { type: 'danger', text: validationError.array()[0].msg }
+      return res.redirect('./create')
+    }
     const codeSnippet = new CodeSnippet({
       title: req.body.title,
       description: req.body.description,
@@ -97,6 +103,11 @@ snippetController.editPost = async (req, res, next) => {
   try {
     const codeSnippet = await CodeSnippet.findOne({ _id: req.body.id })
     if (codeSnippet.name === req.session.user.name) {
+      const validationError = validationResult(req)
+      if (!validationError.isEmpty()) {
+        req.session.flash = { type: 'danger', text: validationError.array()[0].msg }
+        return res.redirect(`./edit/${req.body.id}`)
+      }
       const result = await CodeSnippet.updateOne({ _id: codeSnippet.id }, {
         title: req.body.title,
         description: req.body.description
