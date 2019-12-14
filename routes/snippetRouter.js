@@ -14,10 +14,10 @@ router.get('/', controller.index)
 //   .get(controller.create)
 //   .post(controller.createPost)
 router.get('/create', controller.create)
-router.post('/create', [check('title', 'Title is required').notEmpty().unescape()	, check('description', 'snippet is required').notEmpty().unescape()	], controller.createPost)
+router.post('/create', [check('title', 'Title is required').notEmpty().escape(), check('description', 'snippet is required').notEmpty().escape()], controller.createPost)
 // GET, POST /edit
 router.get('/edit/:id', controller.edit)
-router.post('/edit', [check('title', 'Title is required').notEmpty().unescape()	, check('description', 'snippet is required').notEmpty().unescape()], controller.editPost)
+router.post('/edit', [check('title', 'Title is required').notEmpty().escape(), check('description', 'snippet is required').notEmpty().escape()], controller.editPost)
 
 // GET, POST  /delete
 router.get('/delete/:id', controller.delete)
